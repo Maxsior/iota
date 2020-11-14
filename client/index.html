@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Maksim Kudryavtsev <maxsior@mail.ru>">
+  <title>Iota Online</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="styles/iota.css">
+</head>
+<body>
+  <div id="popup" class="popup">
+    <p class="popup__message"></p>
+  </div>
+
+  <div id="page_start" class="page active">
+    <h1 class="title">IOTA</h1>
+
+    <div class="input">
+      <label for="input_player_name" class="input__label">Name</label>
+      <input id="input_player_name" class="input__input" type="text"/>
+    </div>
+
+    <div class="input">
+      <label for="input_room_id" class="input__label">Room</label>
+      <input id="input_room_id" class="input__input" type="text"/>
+      <small>* leave blank to create a new room with random name</small>
+    </div>
+
+    <div class="input">
+      <button id="button_join_room" class="input__button">Start</button>
+    </div>
+  </div>
+
+  <div id="page_game" class="page">
+    <canvas id="iota" resize></canvas>
+    <div class="stat">
+      <details open>
+        <summary>Info</summary>
+        <p class="stat__room_info">Room: <span id="room_id"></span></p>
+        <p class="stat__room_info">Players: <span id="players_number"></span></p>
+        <p class="stat__room_info">Current: <span id="current_player"></span></p>
+        <p class="stat__room_info">Host: <span id="host_player"></span></p>
+        <div class="stat__scores" id="scores"></div>
+      </details>
+    </div>
+
+    <div class="controls">
+      <button id="button_quit" class="inline_button">
+        <span class="material-icons button_icon">exit_to_app</span>
+      </button>
+      <br/>
+      <button id="button_center" class="inline_button">
+        <span class="material-icons button_icon">center_focus_strong</span>
+      </button>
+      <button id="button_pass" class="inline_button">
+        <span class="material-icons button_icon">skip_next</span>
+      </button>
+    </div>
+    <div class="input" id="button_start_wrapper">
+      <button id="button_start" class="input__button">Start the&nbsp;game!</button>
+    </div>
+  </div>
+
+  <script src="index.ts"></script>
+</body>
+</html>

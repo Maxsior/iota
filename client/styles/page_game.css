@@ -1,0 +1,65 @@
+#page_game {
+    min-height: 375px;
+    min-width: 280px;
+    user-select: none;
+}
+
+.stat {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.55rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(0.5rem);
+}
+
+.stat__room_info {
+    margin: 0 0 0.25rem 0;
+}
+
+#room_id {
+    user-select: text;
+}
+
+.stat__scores {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(128, 128, 128);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-left: -0.5rem;
+}
+
+.stat__scores_row {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 0.25rem;
+}
+
+.stat__scores_row:last-child {
+    padding-bottom: 0;
+}
+
+.stat__scores_name {
+    padding-right: 0.5rem;
+    flex: 1;
+}
+
+.stat__scores_score {
+    width: 2.5rem;
+    padding-left: 0.5rem;
+    border-left: 1px rgb(128, 128, 128) solid;
+}
+
+.controls {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.75rem;
+}
+
+#button_start_wrapper {
+    position: absolute;
+    display: none;
+}
