@@ -1,20 +1,25 @@
-import SocketIO from 'socket.io';
-import { Server } from 'http';
+import { Server, Socket } from 'socket.io';
+import { Server as HTTPServer } from 'http';
 import Room from './Room.js';
 import RoomFactory from './RoomFactory.js';
 
 class GameServer {
-  private io: SocketIO.Server;
+  private io: Server;
 
   private handlers: {[event: string]: Function} = {};
 
   private rooms: {[name: string]: Room} = {};
 
   constructor(
-    private server: Server,
+    private server: HTTPServer,
   ) {
-    this.io = new SocketIO(server, {
+    this.io = new Server(server, {
       path: '/iota',
+      cors: {
+        origin: 'http://localhost:1234',
+        methods: ['GET'],
+      },
+      serveClient: false,
     });
     this.onConnect = this.onConnect.bind(this);
   }
@@ -23,7 +28,7 @@ class GameServer {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
     let id = '';
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i += 1) {
       id += chars[Math.floor(Math.random() * chars.length)];
     }
 
@@ -34,25 +39,45 @@ class GameServer {
     return id;
   }
 
-  public joinRoom(socket: SocketIO.Socket, roomId?: string) {
-    const room = roomId || this.generateRoomId();
+  public static getRoom(socket: Socket) {
+    const roomIter = socket.rooms.values();
+    roomIter.next(); // skip own room
+    return roomIter.next().value;
+  }
+
+  public joinRoom(socket: Socket, roomId?: string) {
+    const room = roomId?.toLowerCase() || this.generateRoomId();
 
     if (!(room in this.rooms)) {
       this.rooms[room] = RoomFactory.create(room);
     }
 
+    if (this.rooms[room].playing) {
+      throw new Error('Game game has already started');
+    }
+
     this.rooms[room].join(socket);
 
-    socket.join(room);
-
     return this.rooms[room].getInfo();
+  }
+
+  leaveRoom(socket: Socket) {
+    const room = GameServer.getRoom(socket);
+
+    if (!room) return;
+
+    this.rooms[room].leave(socket);
+
+    if (this.rooms[room].empty) {
+      delete this.rooms[room];
+    }
   }
 
   addHandler(event: string, handler: Function) {
     this.handlers[event] = handler;
   }
 
-  private onConnect(socket: SocketIO.Socket) {
+  private onConnect(socket: Socket) {
     console.log('connect: ', socket.id);
 
     Object.entries(this.handlers).forEach(([event, handler]) => {
@@ -63,6 +88,14 @@ class GameServer {
   listen(...args: any[]) {
     this.io.on('connect', this.onConnect);
     this.server.listen(...args);
+  }
+
+  startGame(socket: Socket) {
+    const room = GameServer.getRoom(socket);
+
+    if (!room) return;
+
+    this.rooms[room].startGame();
   }
 }
 

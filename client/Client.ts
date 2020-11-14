@@ -12,20 +12,22 @@ class Client {
     });
   }
 
+  get id() {
+    return this.io.id;
+  }
+
   connect() {
     this.io.connect();
+  }
+
+  disconnect() {
+    this.io.disconnect();
   }
 
   setName(name: string) {
     this.io.io.opts.query = {
       name,
     };
-
-    this.io.connect();
-  }
-
-  get id() {
-    return this.io.id;
   }
 
   joinRoom(roomId: string): Promise<AckData<RoomInfo>> {

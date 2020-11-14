@@ -50,8 +50,22 @@ class UI {
     });
   }
 
+  static wait(canStart: boolean) {
+    UI.get('start_wrapper').style.display = '';
+    const waitingStyle = UI.get('waiting').style;
+    const startButtonStyle = UI.get('button_start').style;
+    if (canStart) {
+      startButtonStyle.display = '';
+      waitingStyle.display = 'none';
+    } else {
+      startButtonStyle.display = 'none';
+      waitingStyle.display = '';
+    }
+  }
+
   private static buildScoreTable(players: any[]) { // TODO types
     const scoresContainer = UI.get('scores');
+    scoresContainer.innerHTML = '';
     players
       .sort((p1, p2) => p2.score - p1.score)
       .forEach(player => {

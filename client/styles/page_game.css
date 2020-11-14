@@ -59,7 +59,6 @@
     font-size: 1.75rem;
 }
 
-#button_start_wrapper {
+#start_wrapper {
     position: absolute;
-    display: none;
 }
